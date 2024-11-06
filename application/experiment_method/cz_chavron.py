@@ -19,25 +19,25 @@ import numpy as np
 # Set parameters
 init_macro = initializer(200000,mode='wait')
 
-ro_element = ["q0_ro","q1_ro"]
-flux_Qi = 1
-excited_Qi = [1,0]
-flux_Ci = 3
-n_avg = 50
-preprocess = "ave" # ave or shot
+ro_element = ["q3_ro", "q4_ro"]
+flux_Qi = 4
+excited_Qi = [3,4]
+flux_Ci = 8
+n_avg = 500
+preprocess = "shot" # ave or shot
 
-time_max = 0.4 # us
-time_resolution = 0.004 # us
-z_amps_range = (-0.2, 0.2)#(0.3, 0.6)
-z_amps_resolution = 0.004
-qubit_z = 0.056
-coupler_z = 0.14
-couplerz_amps_range =(-2, 0.5)#(-2, 0.5)#(0.1, 0.2)
-couplerz_amps_resolution = 0.0025
+time_max = 0.8 # us
+time_resolution = 0.008 # us
+z_amps = -0.03*2
+z_amps_range = (0.1*2,0.12*2)
+z_amps_resolution = 0.0002*2
+coupler_z = 0.0*2
+couplerz_amps_range = (0.0*2,0.3*2)
+couplerz_amps_resolution = 0.003*2
 
 save_data = True
 save_dir = link_config["path"]["output_root"]
-save_name = f"q{excited_Qi[0]}q{excited_Qi[1]}_cz_couplerz"
+save_name = f"q{excited_Qi[0]}q{excited_Qi[1]}_cz_chavron_shot"
 
 from exp.cz_chavron import CZ,CZ_couplerz, CZ_coupler_time
 # dataset = CZ(time_max,time_resolution,z_amps_range,z_amps_resolution,ro_element,flux_Qi,excited_Qi,flux_Ci,coupler_z,preprocess,qmm,config,n_avg=n_avg,initializer=init_macro,simulate=False)

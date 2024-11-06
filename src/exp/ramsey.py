@@ -110,10 +110,10 @@ class Ramsey( QMMeasurement ):
 
         return dataset
        
-def T2_fitting(signal):
+def T2_fitting(time,signal):
     try:
         fit = Fit()
-        decay_fit = fit.ramsey(4 * idle_times, signal, plot=False)
+        decay_fit = fit.ramsey(time, signal, plot=False)
         qubit_T2 = np.round(np.abs(decay_fit["T2"][0]) / 4) * 4
     except Exception as e:     
         print(f"An error occurred: {e}")  
@@ -155,6 +155,8 @@ def plot_ramsey_oscillation( x, y, ax=None ):
     if ax == None:
         fig, ax = plt.subplots()
     ax.plot(x, y, "-",label="T2")
+    T2 = T2_fitting(x,y)
+    print(T2)
     ax.set_xlabel("Free Evolution Times [ns]")
     ax.legend()
     if ax == None:
@@ -170,7 +172,13 @@ def plot_multiT2( data, rep, time ):
     idata = data[0]
     qdata = data[1]
     zdata = idata +1j*qdata
-
+    
+    T2_list = []
+    for i in range(len(rep)):
+        T2 = T2_fitting(time,idata[i])
+        T2_list.append(T2)
+    T2_list = np.array(T2_list)
+    print(f"T2 = {np.mean(T2_list)}")
     fig, ax = plt.subplots(2)
     ax[0].set_title('I signal')
     ax[0].pcolormesh( time, rep, idata, cmap='RdBu')# , vmin=z_min, vmax=z_max)

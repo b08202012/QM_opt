@@ -18,8 +18,8 @@ import matplotlib.pyplot as plt
 
 # Set parameters
 ro_elements = ["q0_ro", "q1_ro", "q2_ro", "q3_ro", "q4_ro"]
-q_name = "q4_xy"
-z_name = "q4_z"
+q_name = "q2_xy"
+z_name = "q2_z"
 
 n_avg = 2000
 const_flux_len = 240 # unit ns <200

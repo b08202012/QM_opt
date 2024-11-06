@@ -35,7 +35,7 @@ class ROFreqSweep( QMMeasurement ):
         self.ro_elements = ["q0_ro"]
         self.initializer = None
         
-        self.freq_range = ( -100, 100 )
+        self.freq_range = ( -300, 300 )
         self.resolution = 1.
 
     

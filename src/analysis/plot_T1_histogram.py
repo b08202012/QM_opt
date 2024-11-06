@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import xarray as xr
 # from exp.flux_dep_qubit_spec_J import *
 # raw_data = np.load(r'q2_t1_raw_20240129-201538.npz', allow_pickle=True)# ["arr_0"].item()
 # tomo_data =
@@ -158,7 +159,7 @@ def tune_flux_t1_spectrum(data,flux,repeat_time):
         print(np.mean(data[i]))
     plt.errorbar(flux,T1_avg,error,elinewidth=2,capsize=4,fmt='o')
 
-def plot_qubit_flux_decay( data, flux, t_delay,t1_data_ave):
+def plot_qubit_flux_decay( data, flux, t_delay):
     """
     data shape ( flux, t_delay )
 
@@ -168,13 +169,26 @@ def plot_qubit_flux_decay( data, flux, t_delay,t1_data_ave):
     ax.set_xlabel("T1 (us)")
     ax.set_ylabel("Flux")
     ax.pcolormesh( t_delay/1000, flux, data, cmap='RdBu')# , vmin=z_min, vmax=z_max)
-    ax.plot(t1_data_ave,flux, color='b',linewidth=1.5, label="T1")
-    ax.set_xlim([0,20])
+    T1 = []
+    for i in range(len(flux)):
+        try:
+            T1_i = fit_T1(t_delay, data[i,:])[0]/1000
+        except:
+            T1_i = 0
+        T1.append(T1_i)
+    T1 = np.array(T1)
+    print(T1)
+    ax.plot(T1,flux, color='b',linewidth=1.5, label="T1")
+    ax.set_xlim(0,0.4)
+    #ax.set_xlim([0,20])
 
 if __name__ == '__main__':
-    span = 300 * u.MHz
-    df = 2 * u.MHz
-    flux_span = 0.3
+    dataset = xr.open_dataset("20240625_1425_q0_xy_T1spectrum.nc")
+    for ro_name, data in dataset.data_vars.items():
+        idata = data.values[0]
+    #pan = 300 * u.MHz
+    #df = 2 * u.MHz
+    flux_range = (-0.3, 0.3)
     flux_resolu = 0.003
     flux_idle = -0.3473
     tau_min = 16 // 4 # in clock cycles
@@ -185,14 +199,15 @@ if __name__ == '__main__':
     repeat_time = 10
 
     t_delay = np.arange(tau_min, tau_max + 0.1, d_tau)  # Linear sweep
-    flux = flux_idle+np.arange(0.,flux_span+flux_resolu,flux_resolu)
-    dfs = np.arange(-span, +span, df)
+    time = dataset.coords["time"].values
+    flux = np.arange(flux_range[0],flux_range[1],flux_resolu)
+    #dfs = np.arange(-span, +span, df)
 
     ########################## t1 data ################################################
     #data = anal_t1(raw_data,ro_name,t_delay,repeat_time)
 
     ########################## flux-t1 data ###########################################
-    data, anal_raw_data = anal_tune_flux_t1(raw_data,ro_name,t_delay, flux, repeat_time)
+    #data, anal_raw_data = anal_tune_flux_t1(raw_data,ro_name,t_delay, flux, repeat_time)
     
     ########################## t1 cdf histogram #######################################
     #t1_hist(data)
@@ -203,21 +218,21 @@ if __name__ == '__main__':
         #t1_hist(t1_data[i])
     
     ########################## flux-t1 spectrum #######################################
-    tune_flux_t1_spectrum(data,flux,repeat_time)
+    #tune_flux_t1_spectrum(data,flux,repeat_time)
     
     ########################## flux-t1 mix cdf histogram ##############################
-    t1_mix=[]
-    for i in range(len(flux)):
-        t1_mix.extend(list(data[i]))
-    t1_mix=np.array(t1_mix)
-    t1_hist(t1_mix)
+    #t1_mix=[]
+    #for i in range(len(flux)):
+        #t1_mix.extend(list(data[i]))
+    #t1_mix=np.array(t1_mix)
+    #t1_hist(t1_mix)
 
     ############################### plot flux-t1 ######################################
-    t1_data_ave = []
-    for i in range(len(flux)):
-        t1_data_ave.append(np.mean(data[i]))
-    t1_data_ave = np.array(t1_data_ave)
-    plot_qubit_flux_decay(anal_raw_data,flux,t_delay,t1_data_ave)
+    #t1_data_ave = []
+    #for i in range(len(flux)):
+        #t1_data_ave.append(np.mean(data[i]))
+    #t1_data_ave = np.array(t1_data_ave)
+    plot_qubit_flux_decay(idata,flux,time)
 
     ##################################################################################
     plt.legend()

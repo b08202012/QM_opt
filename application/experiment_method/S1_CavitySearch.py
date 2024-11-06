@@ -20,7 +20,7 @@ save_dir = link_config["path"]["output_root"]
 
 from exp.rofreq_sweep import ROFreqSweep
 my_exp = ROFreqSweep(config, qmm)
-my_exp.freq_range = (-400, 400)
+my_exp.freq_range = (-300, 300)
 my_exp.resolution = 0.1
 my_exp.initializer = initializer(2000,mode='wait')
 dataset = my_exp.run( 100 )

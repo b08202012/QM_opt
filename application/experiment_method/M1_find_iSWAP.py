@@ -13,6 +13,18 @@ config_obj, spec = import_config( link_path )
 config = config_obj.get_config()
 qmm, _ = spec.buildup_qmm()
 
+# Dynamic config
+# Import necessary file
+from pathlib import Path
+link_path = Path(__file__).resolve().parent.parent/"config_api"/"config_link.toml"
+
+from QM_driver_AS.ultitly.config_io import import_config, import_link
+link_config = import_link(link_path)
+config_obj, spec = import_config( link_path )
+
+config = config_obj.get_config()
+qmm, _ = spec.buildup_qmm()
+
 
 from ab.QM_config_dynamic import initializer
 
@@ -20,22 +32,22 @@ init_macro = initializer(200000,mode='wait')
 link_config = import_link(link_path)
 
 
-ro_elements = ['q0_ro','q1_ro','q2_ro','q3_ro','q4_ro']
-excited_q = 'q3_xy'
-z_name = ['q3_z']
+ro_elements = ['q0_ro','q1_ro']
+excited_q = 'q1_xy'
+z_name = ['q1_z']
 
 
-n_avg = 100  # The number of averages
+n_avg = 200  # The number of averages
 
 # amps = np.arange(0.10, 0.14, 0.002)  # The relative flux amplitude absZvolt-offset
 # time = np.arange(40, 8000, 200) # The flux pulse durations in clock cycles (4ns) - Must be larger than 4 clock cycles.
 
-mid = 0.064
-ra = 0.01
+mid = 0.18
+ra = 0.05
 amps = np.arange(mid-ra, mid+ra, ra/25)  # The relative flux amplitude absZvolt-offset
-time = np.arange(16, 2000, 4) # The flux pulse durations in clock cycles (4ns) - Must be larger than 4 clock cycles.
-coupler_z = "q8_z"
-coupler_amp = +0.037
+time = np.arange(16, 1000, 4) # The flux pulse durations in clock cycles (4ns) - Must be larger than 4 clock cycles.
+coupler_z = "q2_z"
+coupler_amp = +0.0
 cc = time/4
 
 from exp.iSWAP_J import exp_coarse_iSWAP, plot_ana_iSWAP_chavron
@@ -63,4 +75,3 @@ plt.show()
 
 
    
-

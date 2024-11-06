@@ -48,7 +48,7 @@ class XYFreqFlux( QMMeasurement ):
         super().__init__( config, qmm )
 
         self.ro_elements = ["q4_ro"]
-        self.z_elements = ["q0_z"]
+        self.z_elements = ["q4_z"]
         self.xy_elements = ["q4_xy"]
         
         self.preprocess = "ave"
@@ -56,12 +56,12 @@ class XYFreqFlux( QMMeasurement ):
         
         self.sweep_type = "z_pulse" #z_pulse or overlap
         self.xy_driving_time = 10
-        self.xy_amp_mod = 0.1
-        self.z_amp_ratio_range = (0.5, 1.5)
-        self.z_amp_ratio_resolution = 0.1
+        self.xy_amp_mod = 0.01
+        self.z_amp_ratio_range = (0.09, 0.101)
+        self.z_amp_ratio_resolution = 0.01
 
-        self.freq_range = ( -1, 1 )
-        self.freq_resolution = 0.5
+        self.freq_range = ( -50, 50 )
+        self.freq_resolution = 50
 
         
 
@@ -104,12 +104,12 @@ class XYFreqFlux( QMMeasurement ):
                                 self._qua_constant_drive_z_pulse(r_z_amp, df)
                             case "overlap":
                                 self._qua_constant_drive_overlap(r_z_amp, df)
-                            case _:
-                                self._qua_constant_drive_z_pulse(r_z_amp, df)
+                            case "z_const":
+                                self._qua_constant_drive_z_const(r_z_amp, df)
 
                         # measurement
+                        #wait(25)
                         multiRO_measurement( iqdata_stream, self.ro_elements, weights='rotated_'  )
-
                     # assign(index, index + 1)
                 save(n, n_st)
             with stream_processing():
@@ -202,10 +202,32 @@ class XYFreqFlux( QMMeasurement ):
         
         # operation
         for i, z in enumerate(self.z_elements):
+            #set_dc_offset(z,"single",self.z_offset[0]+r_z_amp)
             play( "const"*amp( r_z_amp ), z, duration=self.qua_xy_driving_time)
+        #play( "const"*amp( 0.1*2 ), "q8_z", duration=self.qua_xy_driving_time)
         for i, xy in enumerate(self.xy_elements):
             update_frequency( xy, self.ref_xy_IF[i] +df )
             play("const"*amp( self.xy_amp_mod ), xy, duration=self.qua_xy_driving_time)
+        #align()
+        #for i, z in enumerate(self.z_elements):
+        #    play( "const"*amp( -r_z_amp*2 ), z, duration=self.qua_xy_driving_time)
+        #for i, z in enumerate(self.z_elements):
+        #    set_dc_offset(z,"single",self.z_offset[0])
+        align()
+    
+    def _qua_constant_drive_z_const( self, r_z_amp, df ):
+        
+        # operation
+        for i, z in enumerate(self.z_elements):
+            set_dc_offset(z,"single",self.z_offset[0]+r_z_amp)
+        for i, xy in enumerate(self.xy_elements):
+            update_frequency( xy, self.ref_xy_IF[i] +df )
+            play("const"*amp( self.xy_amp_mod ), xy, duration=self.qua_xy_driving_time)
+        #align()
+        #for i, z in enumerate(self.z_elements):
+        #    play( "const"*amp( -r_z_amp*2 ), z, duration=self.qua_xy_driving_time)
+        #for i, z in enumerate(self.z_elements):
+        #    set_dc_offset(z,"single",self.z_offset[0])
         align()
 
     def _qua_constant_drive_overlap( self, r_z_amp, df ):
@@ -320,9 +342,10 @@ def plot_ana_flux_dep_qubit_1D( data, flux, dfs, freq_LO, freq_IF, abs_z, ax=Non
     # print(np.shape(dfs))
     # print(np.shape(zdata))
 
-    mid_flux_index = (len(flux))//2
-    mid_flux = abs_z + flux[mid_flux_index]
-    mid_zdata = zdata[mid_flux_index]    # data shape ( N )
+    #mid_flux_index = (len(flux))//2
+    mid_flux = abs_z + flux[-1]
+    print(mid_flux)
+    mid_zdata = zdata[-1]    # data shape ( N )
 
     abs_freq = freq_LO+freq_IF+dfs
 
@@ -341,3 +364,4 @@ def plot_ana_flux_dep_qubit_1D( data, flux, dfs, freq_LO, freq_IF, abs_z, ax=Non
 
     ax[0].legend()
     ax[1].legend()
+

@@ -11,7 +11,7 @@ config = config_obj.get_config()
 qmm, _ = spec.buildup_qmm()
 
 from ab.QM_config_dynamic import initializer
-init_macro = initializer(200000,mode='wait')
+init_macro = initializer(300000,mode='wait')
 
 save_dir = link_config["path"]["output_root"]
 
@@ -21,7 +21,7 @@ import matplotlib.pyplot as plt
 ro_elements = [ "q7_ro", "q8_ro"]
 operate_qubit = ['q8_xy']
 
-save_data = True
+save_data = False
 save_name = f"ro_amp_{operate_qubit[0]}"
 folder_label = "ro_amp_1"
 

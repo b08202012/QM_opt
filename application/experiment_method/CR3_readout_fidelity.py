@@ -10,7 +10,7 @@ config = config_obj.get_config()
 qmm, _ = spec.buildup_qmm()
 
 from ab.QM_config_dynamic import initializer
-init_macro = initializer(400000,mode='wait')
+init_macro = initializer(300000,mode='wait')
 
 save_dir = link_config["path"]["output_root"]
 

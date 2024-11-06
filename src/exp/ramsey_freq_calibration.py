@@ -35,9 +35,9 @@ class RamseyFreqCalibration( QMMeasurement ):
     def __init__( self, config, qmm: QuantumMachinesManager ):
         super().__init__( config, qmm )
 
-        self.ro_elements = ["q0_ro"]
-        self.z_elements = ["q0_z"]
-        self.xy_elements = ["q0_xy"]
+        self.ro_elements = ["q4_ro"]
+        self.z_elements = ["q1_z"]
+        self.xy_elements = ["q4_xy"]
         
         self.preprocess = "ave"
         self.initializer = None
@@ -45,10 +45,10 @@ class RamseyFreqCalibration( QMMeasurement ):
         # self.sweep_type = "z_pulse"
 
 
-        self.virtial_detune_freq = 10
+        self.virtial_detune_freq = 5
 
-        self.point_per_period = 1
-        self.max_period = 1
+        self.point_per_period = 20
+        self.max_period = 6
         
 
     def _get_qua_program( self ):
@@ -93,13 +93,17 @@ class RamseyFreqCalibration( QMMeasurement ):
 
                         for q in self.xy_elements:
                             wait(t, q)
+                            #play("x180",q)
+                            #wait(t,q)
 
                         for q in self.xy_elements:
                             frame_rotation_2pi(phi, q)  # Virtual Z-rotation
                             play("x90", q)  # 2st x90 gate
 
                         # Align after playing the qubit pulses.
-                        align()
+                        wait(t)
+                        wait(120*u.ns)
+                        #align()
                         # Readout
                         multiRO_measurement(iqdata_stream, self.ro_elements, weights="rotated_")         
                     

@@ -32,9 +32,9 @@ class DetunedRabiFluxPulse( QMMeasurement ):
     def __init__( self, config, qmm: QuantumMachinesManager ):
         super().__init__( config, qmm )
 
-        self.ro_elements = ["q0_ro"]
-        self.z_elements = ["q0_z"]
-        self.xy_elements = ["q0_xy"]
+        self.ro_elements = ["q4_ro"]
+        self.z_elements = ["q4_z"]
+        self.xy_elements = ["q4_xy"]
 
         self.initializer = None
         
@@ -45,7 +45,7 @@ class DetunedRabiFluxPulse( QMMeasurement ):
 
         self.amp_modify = 0.2
 
-        self.freq_range = ( -300, 50 )
+        self.freq_range = ( -200, 50 )
         self.freq_resolution = 100
 
         
@@ -59,7 +59,6 @@ class DetunedRabiFluxPulse( QMMeasurement ):
 
         self._attribute_config()
         
-
         with program() as multi_res_spec_vs_amp:
         
             iqdata_stream = multiRO_declare( self.ro_elements )
@@ -87,12 +86,13 @@ class DetunedRabiFluxPulse( QMMeasurement ):
                         for z in self.z_elements:
                             wait( (16+self.pad_zeros[0])//4,z)
                             play("const"*amp(self.amp_modify), z, duration=self.qua_cc_duration)
-
+                            play("const"*amp(-0.04), "q8_z", duration=self.qua_cc_duration)
                         for i, xy in enumerate(self.xy_elements):
                             update_frequency( xy, self.ref_xy_IF[i] +df )
 
                             wait( cc, xy )
                             play("x180", xy )
+                            play("x180", "q3_xy")
                         align()
                         # Readout
                         multiRO_measurement( iqdata_stream, self.ro_elements, weights='rotated_' )

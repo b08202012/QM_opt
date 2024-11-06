@@ -14,13 +14,13 @@ from ab.QM_config_dynamic import initializer
 import matplotlib.pyplot as plt
 
 # Set parameters
-init_macro = initializer(200000,mode='wait')
+init_macro = initializer(100000,mode='wait')
 
 ro_elements = ["q7_ro", "q8_ro"]
 q_name =  "q8_xy"
 
 
-save_data = True
+save_data = False
 save_dir = link_config["path"]["output_root"]
 save_name = f"{q_name}_XYampCali"
 folder_label = "xy_amp_1"

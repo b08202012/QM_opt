@@ -11,6 +11,8 @@ from qualang_tools.plot import interrupt_on_close
 import matplotlib.pyplot as plt
 from scipy import signal
 from scipy.optimize import curve_fit
+from qualang_tools.units import unit
+u = unit(coerce_to_integer=True)
 
 ##############
 # QUA macros #
@@ -206,7 +208,7 @@ def tomo_pre_save_singleShot( iqdata_stream, q_name:list, resonators:list, suffi
         resonators = [resonators]
     if type(q_name) is not list:
         q_name = [q_name]
-    q_dim = tuple( [3] *len(q_name) )
+    q_dim = tuple( [3] * len(q_name) )
     ro_channel_num = len(resonators)
     for idx_res, res in enumerate(resonators):
         I_st[idx_res].buffer(*q_dim).save_all(f"{res}_I{suffix}")
@@ -230,9 +232,9 @@ def state_tomo_NQ_measurement( QV, iqdata_stream, process, q_name, resonators, t
             with case_(0):
                 pass
             with case_(1):
-                play("y90", f"{q}")
+                play("-y90", f"{q}")
             with case_(2):
-                play("-x90", f"{q}")
+                play("x90", f"{q}")
     # Measure resonator state after the sequence
     align()
     multiRO_measurement( iqdata_stream, resonators, weights=weights )

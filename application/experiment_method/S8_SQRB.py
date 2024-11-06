@@ -20,8 +20,8 @@ import numpy as np
 # Set parameters
 init_macro = initializer(300000,mode='wait')
 # Set parameters
-ro_elements = ["q0_ro", "q1_ro", "q2_ro", "q3_ro", "q4_ro"]
-q_name = "q4_xy"
+ro_elements = ["q3_ro"]
+q_name = "q3_xy"
 
 gate_length = 40
 
@@ -58,7 +58,6 @@ if save_data:
 from exp.randomized_banchmarking_sq import plot_SQRB_result
 fig, ax = plt.subplots(2)
 
-rep = dataset.coords["repetition"].values
 plot_SQRB_result( x, value_avg, error_avg )
 if save_data: save_fig(folder_save_dir, save_name, dataset)
 

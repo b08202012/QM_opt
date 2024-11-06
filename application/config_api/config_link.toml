@@ -2,12 +2,11 @@
 
 
 [sample]
-  name = "HappyQubit"
+  name = "20241105_DR4_2Q2C"
 
 [path]
-    config = "C:\\Users\\arthu\\Coding\\Python\\Single_Qubit_Measurement_config\\HappyQubit.json"
-    dynamic_config = "C:\\Users\\arthu\\Coding\\Python\\Single_Qubit_Measurement_config\\HappyQubit_config.pkl"
-    specification = "C:\\Users\\arthu\\Coding\\Python\\Single_Qubit_Measurement_config\\HappyQubit_spec.pkl"
-    output_root = "C:\\Users\\arthu\\Coding\\Python\\Single_Qubit_Measurement_config\\HappyQubit"
-
+    config = "C:\\QM\\QM_config\\20241105_DR4_2Q2C.json"
+    dynamic_config = "C:\\QM\\QM_config\\20241105_DR4_2Q2C_config.pkl"
+    specification = "C:\\QM\\QM_config\\20241105_DR4_2Q2C_spec.pkl"
+    output_root = "C:\\QM\\Data\\20241105_DR4_2Q2C"
 

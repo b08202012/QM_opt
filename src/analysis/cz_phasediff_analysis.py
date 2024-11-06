@@ -2,18 +2,16 @@ import numpy as np
 import matplotlib.pyplot as plt
 import xarray as xr
 
-
-filename = r"C:\Users\admin\SynologyDrive\09 Data\Fridge Data\Qubit\20240920_DRKe_5Q4C\raw_data\20241004_111446_CZ_diff\q1q0_cz_phasediff_shot.nc"
+filename = 'C:\\QM\\Data\\20240620_DR4_5Q4C_0430#7_new\\20241025_1519_q3q4_cz_phasediff_1D.nc'
 dataset = xr.open_dataset(filename,engine='netcdf4', format='NETCDF4')
-cz_amp = dataset.coords["cz_amp"].values
-c_amp = dataset.coords["c_amp"].values
-# cz_time = dataset.coords["cz_time"].values
+cz_amp = [1]#dataset.coords["cz_amp"].values
+c_amp = [1]#dataset.coords["c_amp"].values
+#cz_time = dataset.coords["cz_time"].values
 
-threhold_q3 = 5.865e-05#2.615e-5#6.097e-5
-threhold_q4 = -1.611e-04#8.246e-7
-ro_element = "q0_ro" # target qubit readout
-
-shot_num = 500
+threhold_q3 = 1.083e-4#6.571e-5#4.77e-5#2.615e-5#6.097e-5
+threhold_q4 = 6.146e-5#1.079e-5#1.303e-4#-1.483e-6#8.246e-7
+ro_element = "q4_ro" # target qubit readout
+shot_num = 1000
 data = dataset[ro_element].values[0]
 print(data.shape)
 

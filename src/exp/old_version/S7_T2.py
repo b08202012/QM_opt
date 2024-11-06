@@ -16,25 +16,25 @@ from exp.save_data import save_nc, save_fig
 import matplotlib.pyplot as plt
 
 # Set parameters
-init_macro = initializer(300000,mode='wait')
+init_macro = initializer(100000,mode='wait')
 ro_elements = ["q0_ro", "q1_ro", "q2_ro", "q3_ro", "q4_ro"]
 q_name = ["q4_xy"]
 
 
-n_avg = 200
-virtual_detune = 1
+n_avg = 500
+virtual_detune = 5
 
-time_max = 10
-time_resolution = 0.1
+time_max = 10.0
+time_resolution = 0.02
 save_data = True
 save_dir = link_config["path"]["output_root"]
 save_name = f"{q_name[0]}_T2"
 
 from exp.ramsey import exp_ramsey, multi_T2_exp
-# dataset = exp_ramsey( time_max, time_resolution, ro_elements, q_name, n_avg, config, qmm, virtual_detune=virtual_detune, initializer=init_macro)
+dataset = exp_ramsey( time_max, time_resolution, ro_elements, q_name, n_avg, config, qmm, virtual_detune=virtual_detune, initializer=init_macro)
 
 repeat = 10
-dataset = multi_T2_exp( repeat, time_max, time_resolution, ro_elements, q_name, n_avg, config, qmm, virtual_detune=virtual_detune, initializer=init_macro)
+#dataset = multi_T2_exp( repeat, time_max, time_resolution, ro_elements, q_name, n_avg, config, qmm, virtual_detune=virtual_detune, initializer=init_macro)
 
 if save_data: save_nc(save_dir, save_name, dataset)
 
@@ -44,10 +44,10 @@ time = dataset.coords["time"].values
 for ro_name, data in dataset.data_vars.items():
     fig, ax = plt.subplots(2)
 
-    # plot_ramsey_oscillation(time, data[0], ax[0])
-    # plot_ramsey_oscillation(time, data[1], ax[1])
-    rep = dataset.coords["repetition"].values
-    plot_multiT2( data, rep, time )
+    plot_ramsey_oscillation(time, data[0], ax[0])
+    plot_ramsey_oscillation(time, data[1], ax[1])
+    #rep = dataset.coords["repetition"].values
+    #plot_multiT2( data, rep, time )
 if save_data: save_fig(save_dir, save_name, dataset)
 
 plt.show()

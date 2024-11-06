@@ -18,16 +18,16 @@ from exp.plotting import plot_and_save_piscope
 
 from exp.detuned_rabi_flux_pulse import DetunedRabiFluxPulse
 my_exp = DetunedRabiFluxPulse(config, qmm)
-my_exp.initializer = initializer(200000,mode='wait')
-my_exp.ro_elements = ["q0_ro", "q1_ro", "q2_ro", "q3_ro", "q4_ro"]
+my_exp.initializer = initializer(100000,mode='wait')
+my_exp.ro_elements = ["q3_ro","q4_ro"]
 my_exp.xy_elements = ["q4_xy"]
 my_exp.z_elements = ["q4_z"]
-my_exp.freq_range = (-300, 50)
-my_exp.freq_resolution = 4
-my_exp.duration = 800
-my_exp.pad_zeros = (80, 0) #ns
-my_exp.time_resolution = 8 #ns
-my_exp.amp_modify = 0.29 #x0.5 is voltage     0.44 0.36 0.29
+my_exp.freq_range = (-50, 150)
+my_exp.freq_resolution =2.0
+my_exp.duration = 160
+my_exp.pad_zeros = (80, 80) #ns
+my_exp.time_resolution = 4 #ns
+my_exp.amp_modify = -0.062 #x0.5 is voltage     0.44 0.36 0.29
  
 dataset = my_exp.run(200)
 

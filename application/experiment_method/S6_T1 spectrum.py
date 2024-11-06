@@ -21,11 +21,11 @@ ro_elements = ["q0_ro"]
 q_name = ["q0_xy"]
 z_name = ['q0_z']
 
-n_avg = 200
-max_time = 60 #us
-time_resolution = 0.6 #us
+n_avg = 10000
+max_time = 0.4 #us
+time_resolution = 0.004 #us
 flux_range = (-0.3, 0.3)
-flux_resolution = 0.0015
+flux_resolution = 0.003
 
 from exp.z_pulse_relaxation_time import z_pulse_relaxation_time
 dataset = z_pulse_relaxation_time( max_time, time_resolution, flux_range, flux_resolution, q_name, z_name, ro_elements, config, qmm, n_avg=n_avg, initializer=init_macro)

@@ -190,14 +190,14 @@ def plot_phase(x, dataset1, dataset2, ax=None):
         fig, ax = plt.subplots()
     try:
         fit = Fit()
-        decay_fit1 = fit.ramsey(4 * idle_times, idata1, plot=False)
+        decay_fit1 = fit.ramsey(4 * x, idata1, plot=False)
         freq1 = decay_fit1["f"][0]
     except:
         print("an error occured in data1")
         freq1 = 0
     try:
         fit = Fit()
-        decay_fit2 = fit.ramsey(4 * idle_times, idata2, plot=False)
+        decay_fit2 = fit.ramsey(4 * x, idata2, plot=False)
         freq2 = decay_fit2["f"][0]
     except:
         print("an error occured in data2")

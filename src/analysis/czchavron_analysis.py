@@ -1,32 +1,33 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from exp.cz_chavron import plot_cz_chavron, plot_cz_couplerz
+from exp.cz_chavron import plot_cz_chavron, plot_cz_couplerz, plot_cz_ramsey
 import xarray as xr
 import os
-filename = 'C:\\QM\\Data\\20240620_DR4_5Q4C_0430#7_new\\20240910_1616_q4q3_cz_couplerz.nc'
+filename = 'C:\\QM\\Data\\20240620_DR4_5Q4C_0430#7_new\\20241025_1752_q3q4_cz_chavron_shot.nc'
 dataset = xr.open_dataset(filename,engine='netcdf4', format='NETCDF4')
 
-#time = dataset.coords["time"].values
-c_amps = dataset["c_amps"].values
+time = dataset.coords["time"].values
+#c_amps = dataset["c_amps"].values
 amps = dataset.coords["amps"].values
 
-"""
-threhold_q3 = -6.182e-5#2.615e-5#6.097e-5
-threhold_q4 = 1.22e-4
+
+
+threhold_q3 = 1.018e-4#2.615e-5#6.097e-5
+threhold_q4 = 6.146e-5
 population = np.zeros((len(amps),len(time)))
-for i in range(1000):
+for i in range(500):
     for j in range(len(amps)):
         for k in range(len(time)):
-            if dataset["q3_ro"].values[0,i,j,k] > threhold_q3 and dataset["q4_ro"].values[0,i,j,k] > threhold_q4:
+            if dataset["q3_ro"].values[0,i,j,k] >= threhold_q3 and dataset["q4_ro"].values[0,i,j,k] >= threhold_q4:
                 population[j,k] += 1
-population = population/1000
+population = population/500
 #print(population[10,10])
 #print(amps)
 
 #print(np.arange(-0.04,-0.05,-0.0001))
 #fig, ax = plt.subplots()
 #ax.plot(time,dataset["q1_ro"][0,11])
-"""
+
 """
 z_offset = 0.05
 z = 0.22
@@ -47,13 +48,15 @@ J_max2 = (fc2*1000 +Ec)**2/(8*Ec*(np.cos(phi2)**2+0.3**2*np.sin(phi2)**2)**0.5)
 zc2 = np.arange(0.2-0.17, 0.2+0.05, 0.001)
 fq2 = (8*Ec*J_max2*(np.cos(np.pi/period2*(amps-z_offset2))**2+0.3**2*np.sin(np.pi/period2*(amps-z_offset2))**2)**0.5)**0.5 - Ec
 """
+
 for ro_name, data in dataset.data_vars.items():
     print(data.shape)
     fig, ax = plt.subplots()
-    #plot_cz_chavron(time,amps,data.values[0],ax)
-    plot_cz_couplerz(amps,c_amps,data.values[0],ax)
+    plot_cz_chavron(time,amps,population,ax)
+    #plot_cz_couplerz(amps,c_amps,data.values[0],ax)
+    #plot_cz_ramsey(c_amps, time, data.values[0],ax)
     #ax[1].plot(time, fq)
-#fig,ax = plt.subplots()
-#ax.plot(time, dataset["q3_ro"].values[0,45])
+fig,ax = plt.subplots()
+#ax.plot(time, dataset["q3_ro"].values[0,24])
 #ax.set_xlabel("interaction time (ns)")
 plt.show()

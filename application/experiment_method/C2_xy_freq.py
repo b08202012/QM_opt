@@ -17,11 +17,11 @@ from ab.QM_config_dynamic import initializer
 import matplotlib.pyplot as plt
 
 # Set parameters
-init_macro = initializer(200000,mode='wait')
+init_macro = initializer(300000,mode='wait')
 
 ro_elements = ["q4_ro"]
 q_name =  ["q4_xy"]
-save_data = True
+save_data = False
 save_dir = link_config["path"]["output_root"]
 save_name = f"{q_name[0]}_XYfreqCali"
 
